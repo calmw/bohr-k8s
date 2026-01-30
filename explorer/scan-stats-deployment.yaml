@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-stats
+  namespace: bohr-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-stats
+  template:
+    metadata:
+      labels:
+        app: scan-stats
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
+      containers:
+        - name: scan-stats
+          image: ghcr.io/blockscout/stats:v2.12.0
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "260Mi"
+              cpu: "260m"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: STATS__DB_URL
+              value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/stats"
+            - name: STATS__BLOCKSCOUT_DB_URL
+              value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan"
+            - name: STATS__CREATE_DATABASE
+              value: "true"
+            - name: STATS__RUN_MIGRATIONS
+              value: "true"
+            - name: STATS__SERVER__HTTP__ENABLED
+              value: "true"
+            - name: STATS__SERVER__HTTP__ADDR
+              value: "0.0.0.0:8050"
+            - name: STATS__SERVER__HTTP__MAX_BODY_SIZE
+              value: "2097152"
+            - name: STATS__SERVER__GRPC__ENABLED
+              value: "false"
+            - name: STATS__SERVER__GRPC__ADDR
+              value: "0.0.0.0:8051"
+            - name: STATS__DEFAULT_SCHEDULE
+              value: "0 0 1 * * * *"
+            - name: STATS__FORCE_UPDATE_ON_START
+              value: "false"
+            - name: STATS__METRICS__ENABLED
+              value: "false"
+            - name: STATS__METRICS__ADDR
+              value: "0.0.0.0:6060"
+            - name: STATS__METRICS__ROUTE
+              value: "/metrics"
+            - name: STATS__JAEGER__ENABLED
+              value: "false"
+            - name: STATS__JAEGER__AGENT_ENDPOINT
+              value: "localhost:6831"
+            - name: STATS__TRACING__ENABLED
+              value: "true"
+            - name: STATS__TRACING__FORMAT
+              value: "default"
+            - name: STATS__BLOCKSCOUT_API_URL
+              value: "http://scan-backend:4000"
+            - name: BLOCKSCOUT_API_URL
+              value: http://scan-backend:4000

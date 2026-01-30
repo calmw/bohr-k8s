@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ipfs
+spec:
+  selector:
+    app: ipfs
+  ports:
+    - name: swarm
+      port: 4001
+    - name: api
+      port: 5001
+    - name: gateway
+      port: 8080

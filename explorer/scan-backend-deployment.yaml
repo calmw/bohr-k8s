@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-backend
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: scan-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-backend
+  template:
+    metadata:
+      labels:
+        app: scan-backend
+        app.kubernetes.io/name: scan-backend
+    spec:
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: scan-backend-logs-pvc
+          persistentVolumeClaim:
+            claimName: scan-backend-logs-pvc
+        - name: scan-backend-dets-pvc
+          persistentVolumeClaim:
+            claimName: scan-backend-dets-pvc
+      # 添加 initContainer
+      initContainers:
+        - name: init-dets
+          image: busybox
+          command: [ "sh", "-c","mkdir -p /app/dets && chmod 777 /app/dets" ]
+          volumeMounts:
+            - name: scan-backend-dets-pvc
+              mountPath: /app/dets
+      containers:
+        - name: scan-backend
+#          image: ghcr.io/blockscout/blockscout:latest
+#          command: ["sh", "-c", "bin/blockscout eval \"Elixir.Explorer.ReleaseTasks.create_and_migrate()\" && bin/blockscout start"]
+          image: blockscout/blockscout:6.8.1.commit.1b1d3402
+          command: ["sh", "-c", "bin/blockscout eval \"Elixir.Explorer.ReleaseTasks.create_and_migrate()\" && bin/blockscout start"]
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+            limits:
+              memory: "510Mi"
+              cpu: "510m"
+          ports:
+            - containerPort: 4000
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 4000
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 4000
+            timeoutSeconds: 5
+
+          volumeMounts:
+            - name: scan-backend-logs-pvc
+              mountPath: /app/logs/
+            - name: scan-backend-dets-pvc
+              mountPath: /app/dets/
+          env:
+            - name: ETHEREUM_JSONRPC_VARIANT
+              value: "geth"
+            - name: ETHEREUM_JSONRPC_HTTP_URL
+              value: "http://rpc.bohr.life"
+            - name: DISABLE_FILE_LOGGING
+              value: "false"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan?sslmode=require"
+            - name: ETHEREUM_JSONRPC_TRANSPORT
+              value: "http"
+            - name: ETHEREUM_JSONRPC_DISABLE_ARCHIVE_BALANCES
+              value: "false"
+            - name: ETHEREUM_JSONRPC_TRACE_URL
+              value: "http://rpc.bohr.life"
+            - name: SECRET_KEY_BASE
+              value: "56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN"
+            - name: PORT
+              value: "4000"
+            - name: COIN_NAME
+              value: "BOT"
+            - name: COIN
+              value: "BOT"
+            - name: DISABLE_MARKET
+              value: "true"
+            - name: POOL_SIZE
+              value: "80"
+            - name: POOL_SIZE_API
+              value: "10"
+            - name: ECTO_USE_SSL
+              value: "true"
+            - name: HEART_BEAT_TIMEOUT
+              value: "30"
+            - name: ADMIN_PANEL_ENABLED
+              value: "false"
+            - name: API_V1_READ_METHODS_DISABLED
+              value: "false"
+            - name: API_V1_WRITE_METHODS_DISABLED
+              value: "false"
+            - name: TXS_STATS_DAYS_TO_COMPILE_AT_INIT
+              value: "10"
+            - name: COIN_BALANCE_HISTORY_DAYS
+              value: "90"
+            - name: RE_CAPTCHA_DISABLED
+              value: "false"
+            - name: MICROSERVICE_SC_VERIFIER_TYPE
+              value: "eth_bytecode_db"
+            - name: MICROSERVICE_VISUALIZE_SOL2UML_ENABLED
+              value: "true"
+            - name: MICROSERVICE_VISUALIZE_SOL2UML_URL
+              value: "http://visualizer:8050/"
+            - name: MICROSERVICE_SIG_PROVIDER_ENABLED
+              value: "true"
+            - name: MICROSERVICE_SIG_PROVIDER_URL
+              value: "http://sig-provider:8050/"
+            - name: MICROSERVICE_ACCOUNT_ABSTRACTION_URL
+              value: "http://user-ops-indexer:8050/"
+            - name: DECODE_NOT_A_CONTRACT_CALLS
+              value: "true"
+            - name: ACCOUNT_ENABLED
+              value: "false"
+            - name: ACCOUNT_REDIS_URL
+              value: "redis://bohr-test.i2m8rw.clustercfg.apne1.cache.amazonaws.com:6379"
+            - name: NFT_MEDIA_HANDLER_ENABLED
+              value: "true"
+            - name: NFT_MEDIA_HANDLER_REMOTE_DISPATCHER_NODE_MODE_ENABLED
+              value: "true"
+            - name: NFT_MEDIA_HANDLER_BUCKET_FOLDER
+              value: "/folder_1"
+            - name: RELEASE_NODE
+              value: "producer@172.18.0.4"
+            - name: RELEASE_DISTRIBUTION
+              value: "name"
+            - name: RELEASE_COOKIE
+              value: "secret_cookie"
+            - name: ENABLE_STATS
+              value: "true"
+            - name: ENABLE_USER_OPS
+              value: "true"
+            - name: ENABLE_CONTRACT_ABI_UPLOAD
+              value: "true"
+            - name: ENABLE_SMART_CONTRACT_VERIFICATION
+              value: "true"

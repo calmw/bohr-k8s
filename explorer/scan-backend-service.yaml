@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scan-backend
+  namespace: bohr-test
+spec:
+  type: ClusterIP
+  selector:
+    app: scan-backend
+  ports:
+    - name: port
+      port: 4000
+      targetPort: 4000

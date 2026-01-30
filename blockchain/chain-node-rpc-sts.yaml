@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: chain-node-rpc
+  namespace: bohr-prod
+  labels:
+    app.kubernetes.io/name: chain-node-rpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chain-node-rpc
+  template:
+    metadata:
+      labels:
+        app: chain-node-rpc
+        app.kubernetes.io/name: chain-node-rpc
+    spec:
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: node-config
+          configMap:
+            name: node-config
+        - name: genesis-config
+          configMap:
+            name: genesis-config
+      containers:
+        - name: chain-node-rpc
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/chain-node-validator:mainnet-9bd51e-20260130204627
+          imagePullPolicy: Always
+          command: [ "bash", "-x", "/data/chain/bin/scripts/node_archive_start.sh" ]
+          ports:
+            - containerPort: 30303
+            - containerPort: 8545
+            - containerPort: 8546
+          # ============ 资源限制配置 ============
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "10m"
+              ephemeral-storage: "25Gi"
+            limits:
+              memory: "2500Mi"
+              cpu: "2500m"
+              ephemeral-storage: "30Gi"
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8545
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8545
+            timeoutSeconds: 5
+          env:
+            - name: BASE_DIR
+              value: "/data/app"
+            - name: DATA_DIR
+              value: "/data/app/node"
+            - name: BIN_DIR
+              value: "/data/chain/bin"
+            - name: DB_ENGINE
+              value: "pebble"
+            - name: GC_MODE
+              value: "archive"
+            - name: STATE_SCHEME
+              value: "hash"
+            - name: SYNC_MODE
+              value: "full"
+            - name: PASSWORD
+              value: "db4847e6338423"
+            - name: HTTP_PORT
+              value: "8545"
+            - name: WS_PORT
+              value: "8546"
+            - name: P2P_PORT
+              value: "30303"
+            - name: METRICS_PORT
+              value: "6060"
+            - name: PPROF_PORT
+              value: "7070"
+            - name: HTTP_API
+              value: "eth,net,web3,debug,txpool"
+            - name: WS_API
+              value: "eth,net,web3,debug,txpool"
+            - name: PASSED_FORK_TIME
+              value: "0"
+            - name: LAST_HARDFORK_TIME # + 10
+              value: "0"
+            - name: RIALTO_HASH
+              value: "0x10177f1be4463f8b7d17b82884e7f72a3fd7f1603d84e1cd8faebe3723a7dfad"
+            - name: NODE_TXT
+            - name: BOOTNODES
+              value: "enode://7040c809482cc6c4e68febe5aced98555a7d6679a7f65ab2e7c616eeeb01bd54cf26bb36260b5939458198211b612bebf6026ae4dc30b29fa50d0716a766c906@18.179.76.29:30303,enode://ad9637c8d282b78af4e24d11fe0a8709f0569ea0c024eac58c7ebd6e40bb2d2899ef03c5d02fd11a797eab245476332f081cf28913dc361156c3d451dc16d723@52.68.163.149:30303,enode://2aa57fd2f10631fa06a29537542d69d457bd0851e1f4432b0068d23c5ff1a9354a4ff0b1cd8ca98c3bad607d23160b33f8914fef18cb20a9aa79853a6c5dca38@54.64.166.104:30303,enode://571f924ab0aeca7783bcc95a9059fdf5ca706ab056a86f262bc31b15b5ec225c0d2e1b00792ab72c47d6d8de811ffa2e34cb943b2f22c5a82f10b1d3d34fa86b@35.75.248.115:30303,enode://bab5c3f1011f5e3cf80aa42cb5da8687a0e743cc447478650a984485b4084fc5889fea9939ccac03598f11dba89f8255c7cf83ad71b044c8356d5f3db5fb30f9@18.176.87.178:30303,enode://70bd5c0995be918e6fd70c5a16a011aa1ca6134ba39955494bf916f47c634cd0e2e143e779940ea576dc4e27e75edf8012e798d24eec1f9f392595b8bfd89f64@35.73.218.11:30303,enode://a57be98d126a04a93358656aba966426c11f92b88ce0f2a6e201ee60e89c3e5f2eaf3d3d9bc65c24fc2e0808fd95fc2dd1e91d8365266b0f18133e4b5e6971fa@18.180.116.96:30303"
+
+          volumeMounts:
+            - name: genesis-config
+              mountPath: /data/app/config-src/genesis.json
+              subPath: genesis.json
+            - name: node-config
+              mountPath: /data/app/config-src/config.toml
+              subPath: config.toml
+            - name: rpc-data
+              mountPath: /data/app/node
+
+  volumeClaimTemplates:
+    - metadata:
+        name: rpc-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 100Gi

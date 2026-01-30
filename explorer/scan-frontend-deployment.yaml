@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-frontend
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: scan-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-frontend
+  template:
+    metadata:
+      labels:
+        app: scan-frontend
+        app.kubernetes.io/name: scan-frontend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
+      containers:
+        - name: scan-frontend
+          image: ghcr.io/blockscout/frontend:latest
+#          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/explorer:test-394867-20251209195615
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "256Mi"    # 增加内存，100Mi对Next.js可能不足
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            # ===== 修复关键环境变量 =====
+            - name: HOST                    # 新增：让Next.js监听所有接口
+              value: "0.0.0.0"
+            - name: PORT
+              value: "3000"
+            # ===== 原有环境变量（修正错误）=====
+            - name: ETHEREUM_JSONRPC_VARIANT
+              value: 'geth'
+            - name: NEXT_PUBLIC_API_HOST
+              value: "scan.bohr.life"
+            - name: NEXT_PUBLIC_API_PROTOCOL
+              value: 'https'
+            - name: NEXT_PUBLIC_STATS_API_HOST # stats服务
+              value: 'https://api-scan.bohr.life'
+#              value: 'https://api-scan.bohr.life:8080'
+            - name: NEXT_PUBLIC_NETWORK_NAME
+              value: 'BOHR Chain'
+            - name: NEXT_PUBLIC_NETWORK_SHORT_NAME
+              value: 'BOHR Chain'
+            - name: NEXT_PUBLIC_NETWORK_ID
+              value: '968'
+            - name: NEXT_PUBLIC_NETWORK_CURRENCY_NAME
+              value: 'BOT'
+            - name: NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL
+              value: 'BOT'
+            - name: NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS
+              value: '18'
+            - name: NEXT_PUBLIC_API_BASE_PATH
+              value: '/'
+            - name: NEXT_PUBLIC_APP_HOST
+              value: 'scan.bohr.life'
+            - name: NEXT_PUBLIC_APP_PROTOCOL
+              value: 'https'
+            - name: NEXT_PUBLIC_HOMEPAGE_CHARTS
+              value: '["daily_txs"]'
+            - name: NEXT_PUBLIC_VISUALIZE_API_HOST
+#              value: 'http://api-scan.bohr.life:8081'
+              value: 'https://api-scan.bohr.life'
+            - name: NEXT_PUBLIC_IS_TESTNET
+              value: 'true'
+            - name: NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL
+              value: 'wss'
+            - name: NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
+              value: "19daf63aef19e341053404ec58bcbf22"
+            - name: ENABLE_WALLETCONNECT
+              value: "true"
+            - name: NEXT_PUBLIC_API_SPEC_URL
+              value: 'https://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml'
+          # ===== 新增健康检查探针（关键！）=====
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 25  # Next.js启动较慢，给足时间
+            periodSeconds: 5
+            failureThreshold: 3
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 40  # 等待应用完全启动
+            periodSeconds: 10
+            failureThreshold: 1

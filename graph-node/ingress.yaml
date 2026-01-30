@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: graph-node
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: graph-node
+    app.kubernetes.io/managed-by: kubectl
+spec:
+#  ingressClassName: nginx-inner
+  ingressClassName: nginx-public
+  rules:
+    - host: graph-node.bohr.life
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node
+                port:
+                  number: 8020
+          - path: /subgraphs
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node
+                port:
+                  number: 8000

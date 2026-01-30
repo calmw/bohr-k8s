@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubo
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: kubo
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kubo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kubo
+    spec:
+      containers:
+      - name: kubo
+        image: ipfs/kubo:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: swarm
+          containerPort: 4001
+          protocol: TCP
+        - name: swarm-udp
+          containerPort: 4001
+          protocol: UDP
+        - name: gateway
+          containerPort: 8080
+          protocol: TCP
+        - name: gateway-alt
+          containerPort: 8081
+          protocol: TCP
+        - name: api
+          containerPort: 5001
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /data/ipfs
+        command:
+        - /bin/sh
+        args:
+        - -c
+        - |
+          export IPFS_PATH=/data/ipfs
+          ipfs init
+          ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
+          ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
+          ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+          ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST"]'
+          ipfs daemon
+        env:
+        - name: IPFS_PATH
+          value: /data/ipfs
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "ipfs id > /dev/null 2>&1"
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "ipfs id > /dev/null 2>&1"
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
+            cpu: 10m
+            memory: 100Mi
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: kubo-pvc

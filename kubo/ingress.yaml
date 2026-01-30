@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ipfs
+  namespace: bohr-test
+  annotations:
+    kubernetes.io/ingress.class: nginx-public
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    # 禁用缓冲以支持大文件
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+spec:
+  ingressClassName: nginx-public
+  rules:
+    - host: kubo.bohr.life
+      http:
+        paths:
+          - path: /api/v0
+            pathType: Prefix
+            backend:
+              service:
+                name: ipfs
+                port:
+                  number: 5001
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ipfs
+                port:
+                  number: 8080

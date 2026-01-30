@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graph-node
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: graph-node
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: graph-node
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: graph-node
+    spec:
+      containers:
+      - name: graph-node
+        image: graphprotocol/graph-node:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        - name: websocket
+          containerPort: 8001
+          protocol: TCP
+        - name: index
+          containerPort: 8020
+          protocol: TCP
+        - name: metrics
+          containerPort: 8030
+          protocol: TCP
+        - name: admin
+          containerPort: 8040
+          protocol: TCP
+        env:
+        - name: postgres_host
+          value: "bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
+        - name: postgres_port
+          value: "5432"
+        - name: postgres_user
+          value: "postgres"
+        - name: postgres_pass
+          value: "tn8D4aKunRGg7AmVeUHA"
+        - name: postgres_db
+          value: "graph_node"
+        - name: ipfs
+          value: "ipfs:5001"
+        - name: ethereum
+          value: "bohrtestnet:https://rpc.bohr.life"
+        - name: redis_host
+          value: "bohr-test.i2m8rw.clustercfg.apne1.cache.amazonaws.com"
+        - name: redis_port
+          value: "6379"
+        - name: GRAPH_LOG
+          value: "info"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+          requests:
+            cpu: 10m
+            memory: 100Mi

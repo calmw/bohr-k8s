@@ -1,0 +1,197 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-backend-deployment
+  namespace: bohr-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-backend
+  template:
+    metadata:
+      labels:
+        app: scan-backend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
+      containers:
+        - name: scan-backend
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/scan-backend:test-df9f0d-20251216022342
+          imagePullPolicy: Always
+          command: ["/bin/bash"]
+          args:
+            - "-c"
+            - |
+              # 设置 TMPDIR 避免使用 /tmp，减少权限问题
+              export TMPDIR=/var/lib/containerd/tmp
+              mkdir -p $TMPDIR
+              
+              # 完整的启动和初始化脚本
+              set -ex
+              echo "=== 开始初始化 Containerd 运行时环境 ==="
+              
+              # 0. 创建必要的应用目录
+              echo "步骤 0: 创建必要的应用目录..."
+              mkdir -p /app/docker-compose/services/blockscout-db-data
+              mkdir -p /app/docker-compose/services/stats-db-data
+              mkdir -p /app/docker-compose/services/logs
+              mkdir -p /app/docker-compose/services/dets
+              chmod 755 /app/docker-compose/services/*
+              echo "✅ 应用目录创建完成"
+              
+              # 1. 根据架构设置变量
+              ARCH=$(uname -m)
+              case $ARCH in
+                x86_64)
+                  TAR_ARCH="amd64"
+                  CNI_ARCH="amd64"
+                  ;;
+                aarch64)
+                  TAR_ARCH="arm64"
+                  CNI_ARCH="arm64"
+                  ;;
+                *)
+                  echo "❌ 不支持的CPU架构: $ARCH"
+                  exit 1
+                  ;;
+              esac
+              echo "检测到系统架构: $ARCH ($TAR_ARCH)"
+              
+              # 2. 安装 nerdctl (Containerd 的 Docker CLI 替代品)
+              if ! command -v nerdctl &> /dev/null; then
+                echo "步骤 2: 正在安装 nerdctl..."
+                NERDCTL_URL="https://github.com/containerd/nerdctl/releases/download/v1.5.0/nerdctl-1.5.0-linux-${TAR_ARCH}.tar.gz"
+                wget -q "$NERDCTL_URL" -O /tmp/nerdctl.tar.gz
+                tar -C /usr/local/bin -xzf /tmp/nerdctl.tar.gz
+                chmod +x /usr/local/bin/nerdctl
+                echo "✅ nerdctl 安装成功: $(nerdctl --version | head -1)"
+              else
+                echo "✅ nerdctl 已安装: $(nerdctl --version | head -1)"
+              fi
+              
+              # 3. 安装 CNI 网络插件 (nerdctl 创建容器网络所必需)
+              if [ ! -f "/opt/cni/bin/bridge" ]; then
+                echo "步骤 3: 正在安装 CNI 网络插件..."
+                mkdir -p /opt/cni/bin
+                CNI_VERSION="v1.4.1"
+                CNI_URL="https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${CNI_ARCH}-${CNI_VERSION}.tgz"
+                wget -q "$CNI_URL" -O /tmp/cni-plugins.tgz
+                tar -C /opt/cni/bin -xzf /tmp/cni-plugins.tgz
+                echo "✅ CNI 插件安装完成. 已安装插件:"
+                ls /opt/cni/bin/ | head -10
+              else
+                echo "✅ CNI 插件已存在"
+              fi
+              
+              # 4. 设置 Containerd 连接环境变量
+              export CONTAINERD_ADDRESS="/run/containerd/containerd.sock"
+              export CONTAINERD_NAMESPACE="k8s.io"
+              echo "步骤 4: 设置 Containerd 连接地址: $CONTAINERD_ADDRESS"
+              
+              # 5. 创建 Docker 命令兼容层 (让现有的 docker 命令指向 nerdctl)
+              echo "步骤 5: 创建 Docker CLI 兼容层..."
+              cat > /usr/local/bin/docker << 'EOF'
+              #!/bin/sh
+              # 这是一个包装脚本，将所有 docker 命令重定向到 nerdctl
+              exec nerdctl --address "${CONTAINERD_ADDRESS:-/run/containerd/containerd.sock}" \
+                           --namespace "${CONTAINERD_NAMESPACE:-k8s.io}" \
+                           "$@"
+              EOF
+              chmod +x /usr/local/bin/docker
+              echo "✅ Docker 兼容层创建完成"
+              
+              # 6. 验证与 Containerd 的连接
+              echo "步骤 6: 验证 Containerd 连接..."
+              if timeout 15 nerdctl --address "$CONTAINERD_ADDRESS" version > /dev/null 2>&1; then
+                echo "✅ 成功连接到 Containerd 守护进程"
+                echo "   Containerd 命名空间: $CONTAINERD_NAMESPACE"
+                echo "   节点上现有容器数量: $(nerdctl --address "$CONTAINERD_ADDRESS" ps -a -q 2>/dev/null | wc -l || echo 0)"
+              else
+                echo "❌ 无法连接到 Containerd"
+                echo "调试信息:"
+                ls -la /run/containerd/
+                echo "尝试原始 API 调用:"
+                curl -s --unix-socket /run/containerd/containerd.sock http://localhost/v1.52/version 2>&1 | head -5
+                exit 1
+              fi
+              
+              # 7. 清理可能残留的旧 Docker 进程 (安全操作)
+              echo "步骤 7: 清理旧环境..."
+              pkill -9 dockerd 2>/dev/null || true
+              
+              # 8. 进入应用目录并启动 Blockscout
+              echo "=== 所有依赖就绪，开始启动 Blockscout 应用 ==="
+              echo "当前工作目录: $(pwd)"
+              echo "切换到 /app/docker 目录..."
+              cd /app/docker
+              echo "检查目录结构..."
+              ls -la /app/
+              ls -la /app/docker-compose/services/
+              echo "执行: make start"
+              echo "----------------------------------------"
+              # 注意: 所有 make start 中的 docker 命令现在都会通过我们的包装脚本指向 nerdctl
+              exec make start
+          env:
+            - name: CONTAINERD_ADDRESS
+              value: "/run/containerd/containerd.sock"
+            - name: CONTAINERD_NAMESPACE
+              value: "k8s.io"
+            - name: DOCKER_HOST
+              value: "unix:///run/containerd/containerd.sock"
+            - name: TMPDIR
+              value: "/var/lib/containerd/tmp"
+            # Blockscout 可能需要的常用环境变量
+            - name: ETHEREUM_JSONRPC_HTTP_URL
+              value: "http://localhost:8545"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@localhost:5432/blockscout?ssl=false"
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
+            allowPrivilegeEscalation: true
+            capabilities:
+              add: ["SYS_ADMIN", "NET_ADMIN", "DAC_OVERRIDE", "FOWNER", "MKNOD"]
+          volumeMounts:
+            - name: host-containerd-sock
+              mountPath: /run/containerd/containerd.sock
+              readOnly: true
+            - name: host-containerd-data
+              mountPath: /var/lib/containerd
+            - name: blockscout-db-data
+              mountPath: /app/docker-compose/services/blockscout-db-data
+            - name: stats-db-data
+              mountPath: /app/docker-compose/services/stats-db-data
+            - name: logs
+              mountPath: /app/docker-compose/services/logs
+            - name: dets
+              mountPath: /app/docker-compose/services/dets
+          resources:
+            requests:
+              memory: "3Gi"
+              cpu: "1000m"
+            limits:
+              memory: "6Gi"
+              cpu: "2000m"
+      volumes:
+        - name: host-containerd-sock
+          hostPath:
+            path: /run/containerd/containerd.sock
+            type: Socket
+        - name: host-containerd-data
+          hostPath:
+            path: /var/lib/containerd
+            type: Directory
+        - name: blockscout-db-data
+          persistentVolumeClaim:
+            claimName: scan-backend-blockscout-db-data-pvc
+        - name: stats-db-data
+          persistentVolumeClaim:
+            claimName: scan-backend-stats-db-data-pvc
+        - name: logs
+          persistentVolumeClaim:
+            claimName: scan-backend-logs-pvc
+        - name: dets
+          persistentVolumeClaim:
+            claimName: scan-backend-dets-pvc

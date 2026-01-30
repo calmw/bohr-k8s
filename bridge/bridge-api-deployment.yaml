@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bridge-api
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: bridge-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bridge-api
+  template:
+    metadata:
+      labels:
+        app: bridge-api
+    spec:
+      containers:
+        - name: bridge-api
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/bridge-api:test-73220f-20260115150004
+          command: ["/bin/sh", "-c", "tail -f /dev/null"]
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 8080
+          env:
+            - name: LISTEN_ADDR
+              value: "0.0.0.0:8080"
+            - name: MYSQL_DATABASE
+              value: "bridge"
+            - name: MYSQL_USERNAME
+              value: "bridge_user"
+            - name: MYSQL_PASSWORD
+              value: "WbVyC0cxipABh9Zo1KaW"
+            - name: MYSQL_HOST
+              value: "chain-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
+            - name: MYSQL_PORT
+              value: "3306"
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "100Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5

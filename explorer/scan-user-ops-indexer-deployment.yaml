@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-user-ops-indexer
+  namespace: bohr-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-user-ops-indexer
+  template:
+    metadata:
+      labels:
+        app: scan-user-ops-indexer
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
+      containers:
+        - name: user-ops-indexer
+          image: ghcr.io/blockscout/user-ops-indexer:latest
+          ports:
+            - containerPort: 8050
+            - containerPort: 8051
+            - containerPort: 6060
+          resources:
+            requests:
+              memory: "256Mi"    # 增加内存，100Mi对Next.js可能不足
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: USER_OPS_INDEXER__INDEXER__RPC_URL
+              value: "ws-rpc.bohr.life"
+            - name: USER_OPS_INDEXER__DATABASE__CONNECT__URL
+              value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan"
+            - name: USER_OPS_INDEXER__DATABASE__RUN_MIGRATIONS
+              value: "true"
+            - name: USER_OPS_INDEXER__SERVER__HTTP__ENABLED
+              value: "true"
+            - name: USER_OPS_INDEXER__SERVER__HTTP__ADDR
+              value: "0.0.0.0:8050"
+            - name: USER_OPS_INDEXER__SERVER__HTTP__MAX_BODY_SIZE
+              value: "2097152"
+            - name: USER_OPS_INDEXER__SERVER__GRPC__ENABLED
+              value: "false"
+            - name: USER_OPS_INDEXER__SERVER__GRPC__ADDR
+              value: "0.0.0.0:8051"
+            - name: USER_OPS_INDEXER__API__MAX_PAGE_SIZE
+              value: "100"
+            - name: USER_OPS_INDEXER__INDEXER__CONCURRENCY
+              value: "20"
+            - name: USER_OPS_INDEXER__INDEXER__ENTRYPOINTS__V06
+              value: "true"
+            - name: USER_OPS_INDEXER__INDEXER__ENTRYPOINTS__V07
+              value: "true"
+            - name: USER_OPS_INDEXER__INDEXER__REALTIME__ENABLED
+              value: "true"
+            - name: USER_OPS_INDEXER__INDEXER__PAST_RPC_LOGS_INDEXER__ENABLED
+              value: "true"
+            - name: USER_OPS_INDEXER__INDEXER__PAST_RPC_LOGS_INDEXER__BLOCK_RANGE
+              value: "1000"
+            - name: USER_OPS_INDEXER__INDEXER__PAST_DB_LOGS_INDEXER__ENABLED
+              value: "true"
+            - name: USER_OPS_INDEXER__INDEXER__PAST_DB_LOGS_INDEXER__START_BLOCK
+              value: "100000"
+            - name: USER_OPS_INDEXER__INDEXER__PAST_DB_LOGS_INDEXER__END_BLOCK
+              value: "0"
+            - name: USER_OPS_INDEXER__DATABASE__CREATE_DATABASE
+              value: "false"
+            - name: USER_OPS_INDEXER__METRICS__ENABLED
+              value: "true"
+            - name: USER_OPS_INDEXER__METRICS__ADDR
+              value: "0.0.0.0:6060"
+            - name: USER_OPS_INDEXER__METRICS__ROUTE
+              value: "/metrics"
+            - name: USER_OPS_INDEXER__JAEGER__ENABLED
+              value: "false"
+            - name: USER_OPS_INDEXER__JAEGER__AGENT_ENDPOINT
+              value: "localhost:6831"
+            - name: USER_OPS_INDEXER__TRACING__ENABLED
+              value: "true"
+            - name: USER_OPS_INDEXER__TRACING__FORMAT
+              value: "default"

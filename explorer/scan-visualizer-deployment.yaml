@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scan-visualizer
+  namespace: bohr-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scan-visualizer
+  template:
+    metadata:
+      labels:
+        app: scan-visualizer
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
+      containers:
+        - name: scan-visualizer
+          image: ghcr.io/blockscout/visualizer:v0.2.1
+          resources:
+            requests:
+              memory: "10Mi"
+              cpu: "10m"
+            limits:
+              memory: "11Mi"
+              cpu: "11m"
+          env:
+            - name: VISUALIZER__SERVER__GRPC__ENABLED
+              value: "false"
