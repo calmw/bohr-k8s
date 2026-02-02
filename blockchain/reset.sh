@@ -8,8 +8,8 @@ echo "等待 10 秒..."
 sleep 10
 kubectl delete configmap genesis-config -n bohr-prod &&
 kubectl delete configmap node-config -n bohr-prod &&
-kubectl create configmap genesis-config --from-file=./cm/genesis.json -n bohr-prod&&
-kubectl create configmap node-config --from-file=./cm/config.toml -n bohr-prod
+kubectl create configmap genesis-config --from-file=genesis.json -n bohr-prod&&
+kubectl create configmap node-config --from-file=config.toml -n bohr-prod
 echo "启动 chain-node-rpc ..."
 kubectl apply -f sts/chain-node-rpc-sts.yaml -n bohr-prod
 
