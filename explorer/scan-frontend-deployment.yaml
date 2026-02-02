@@ -16,8 +16,6 @@ spec:
         app: scan-frontend
         app.kubernetes.io/name: scan-frontend
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
       containers:
         - name: scan-frontend
           image: ghcr.io/blockscout/frontend:latest
