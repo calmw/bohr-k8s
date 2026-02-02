@@ -26,7 +26,7 @@ spec:
             name: genesis-config
       containers:
         - name: chain-node-rpc
-          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/chain-node-validator:mainnet-9bd51e-20260130204627
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/chain-node-validator:mainnet-e8bb4a-20260202131508
           imagePullPolicy: Always
           command: [ "bash", "-x", "/data/chain/bin/scripts/node_archive_start.sh" ]
           ports:
