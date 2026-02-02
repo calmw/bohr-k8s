@@ -25,7 +25,7 @@ metadata:
     # 允许的请求头
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
     # CSP 安全策略
-#    nginx.ingress.kubernetes.io/content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://rpc.bohr.life https://pulse.walletconnect.org https://api.web3modal.org;"
+#    nginx.ingress.kubernetes.io/content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://rpc.botchain.ai https://pulse.walletconnect.org https://api.web3modal.org;"
     nginx.ingress.kubernetes.io/content-security-policy: >
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:;
@@ -33,12 +33,12 @@ metadata:
       img-src 'self' data: blob:;
       font-src 'self' data:;
       connect-src 'self'
-        https://scan.bohr.life
-        http://scan.bohr.life
-        ws://scan.bohr.life
-        wss://scan.bohr.life
-        https://api-scan.bohr.life
-        https://rpc.bohr.life
+        https://scan.botchain.ai
+        http://scan.botchain.ai
+        ws://scan.botchain.ai
+        wss://scan.botchain.ai
+        https://api-scan.botchain.ai
+        https://rpc.botchain.ai
         https://rpc.walletconnect.org
         https://pulse.walletconnect.org
         https://api.web3modal.org
