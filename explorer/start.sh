@@ -12,7 +12,6 @@ kubectl apply -f scan-backend-service.yaml -n bohr-prod &&
 kubectl apply -f scan-frontend-service.yaml -n bohr-prod &&
 kubectl apply -f scan-stats-service.yaml -n bohr-prod &&
 kubectl apply -f scan-visualizer-service.yaml -n bohr-prod &&
-kubectl apply -f scan-sig-provider-service.yaml -n bohr-prod &&
 kubectl apply -f db-init-job.yaml -n bohr-test &&
 kubectl apply -f stats-db-init-job.yaml -n bohr-test &&
 kubectl apply -f scan-stats-ingress.yaml -n bohr-test &&
