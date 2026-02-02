@@ -27,7 +27,7 @@ spec:
             - containerPort: 8080
           env:
             - name: STATS__DB_URL
-              value: "postgresql://stats_user:eLGCY62Vfwe2kYAALAKq@bohr-prod-mysql.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/stats"
+              value: "postgresql://stats_user:eLGCY62Vfwe2kYAALAKq@bohr-prod-pg.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/stats"
             - name: STATS__BLOCKSCOUT_DB_URL
               value: "postgresql://scan_user:36d5Me1KZ61N8j3B2NVb@bohr-prod-pg.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan"
             - name: STATS__CREATE_DATABASE
