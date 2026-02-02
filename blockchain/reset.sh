@@ -12,6 +12,11 @@ kubectl create configmap genesis-config --from-file=genesis.json -n bohr-prod&&
 kubectl create configmap node-config --from-file=config.toml -n bohr-prod
 echo "启动 chain-node-rpc ..."
 kubectl apply -f chain-node-rpc-sts.yaml -n bohr-prod
+echo "启动 chain-node-rpc service ..."
+kubectl apply -f chain-node-rpc-svc.yaml -n bohr-prod
+echo "启动 chain-node-rpc ingress ..."
+kubectl apply -f rpc-ingress-http.yaml -n bohr-prod
+kubectl apply -f rpc-ingress-ws.yaml -n bohr-prod
 
 echo "等待 20 秒..."
 sleep 20
