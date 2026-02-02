@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scan-user-ops-indexer
-  namespace: bohr-test
+  namespace: bohr-prod
 spec:
   replicas: 1
   selector:
@@ -33,7 +33,7 @@ spec:
             - name: USER_OPS_INDEXER__INDEXER__RPC_URL
               value: "ws-rpc.bohr.life"
             - name: USER_OPS_INDEXER__DATABASE__CONNECT__URL
-              value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan"
+              value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-prod-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan"
             - name: USER_OPS_INDEXER__DATABASE__RUN_MIGRATIONS
               value: "true"
             - name: USER_OPS_INDEXER__SERVER__HTTP__ENABLED

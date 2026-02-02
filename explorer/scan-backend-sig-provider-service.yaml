@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scan-backend-deployment
-  namespace: bohr-test
+  namespace: bohr-prod
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
         kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
       containers:
         - name: scan-backend
-          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/scan-backend:test-df9f0d-20251216022342
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-prod/scan-backend:test-df9f0d-20251216022342
           imagePullPolicy: Always
           command: ["/bin/bash"]
           args:

@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: graph-node
-  namespace: bohr-test
+  namespace: bohr-prod
   labels:
     app.kubernetes.io/name: graph-node
     app.kubernetes.io/managed-by: kubectl

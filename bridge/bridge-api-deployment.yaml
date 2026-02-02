@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bridge-api
-  namespace: bohr-test
+  namespace: bohr-prod
   labels:
     app.kubernetes.io/name: bridge-api
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: bridge-api
-          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/bridge-api:test-73220f-20260115150004
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-prod/bridge-api:test-73220f-20260115150004
           command: ["/bin/sh", "-c", "tail -f /dev/null"]
           stdin: true
           tty: true

@@ -4,7 +4,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-NAMESPACE="bohr-test"
+NAMESPACE="bohr-prod"
 KUBECTL_CMD="kubectl -n $NAMESPACE"
 KUBECTL_NS_ARG="-n $NAMESPACE"
 

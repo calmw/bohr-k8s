@@ -9,7 +9,7 @@ echo "Graph Node Kubernetes 测试"
 echo "========================================="
 echo ""
 
-NAMESPACE="bohr-test"
+NAMESPACE="bohr-prod"
 KUBECTL_CMD="kubectl -n $NAMESPACE"
 
 echo "1. 检查 Pod 状态..."

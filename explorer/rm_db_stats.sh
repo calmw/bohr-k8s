@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-PGHOST="bohr-test-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
+PGHOST="bohr-prod-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
 PGPORT="5432"
 PGUSER="postgres"
 DB_NAME="stats"

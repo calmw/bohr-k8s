@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kubo
-  namespace: bohr-test
+  namespace: bohr-prod
   labels:
     app.kubernetes.io/name: kubo
     app.kubernetes.io/managed-by: kubectl

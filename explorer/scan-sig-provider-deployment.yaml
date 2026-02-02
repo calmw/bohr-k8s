@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scan-sig-provider
-  namespace: bohr-test
+  namespace: bohr-prod
 spec:
   replicas: 1
   selector:

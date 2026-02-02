@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scan-backend
-  namespace: bohr-test
+  namespace: bohr-prod
   labels:
     app.kubernetes.io/name: scan-backend
 spec:
@@ -131,7 +131,7 @@ spec:
             - name: ACCOUNT_ENABLED
               value: "false"
             - name: ACCOUNT_REDIS_URL
-              value: "redis://bohr-test.i2m8rw.clustercfg.apne1.cache.amazonaws.com:6379"
+              value: "redis://bohr-prod.i2m8rw.clustercfg.apne1.cache.amazonaws.com:6379"
             - name: NFT_MEDIA_HANDLER_ENABLED
               value: "true"
             - name: NFT_MEDIA_HANDLER_REMOTE_DISPATCHER_NODE_MODE_ENABLED
