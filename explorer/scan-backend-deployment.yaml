@@ -73,7 +73,7 @@ spec:
             - name: ETHEREUM_JSONRPC_VARIANT
               value: "geth"
             - name: ETHEREUM_JSONRPC_HTTP_URL
-              value: "http://rpc.bohr.life"
+              value: "https://rpc.botchain.ai"
             - name: DISABLE_FILE_LOGGING
               value: "false"
             - name: DATABASE_URL
