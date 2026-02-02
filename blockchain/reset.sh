@@ -11,7 +11,7 @@ kubectl delete configmap node-config -n bohr-prod &&
 kubectl create configmap genesis-config --from-file=genesis.json -n bohr-prod&&
 kubectl create configmap node-config --from-file=config.toml -n bohr-prod
 echo "启动 chain-node-rpc ..."
-kubectl apply -f sts/chain-node-rpc-sts.yaml -n bohr-prod
+kubectl apply -f chain-node-rpc-sts.yaml -n bohr-prod
 
 echo "等待 20 秒..."
 sleep 20
