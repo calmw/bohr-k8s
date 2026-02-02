@@ -13,8 +13,6 @@ spec:
       labels:
         app: scan-stats
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
       containers:
         - name: scan-stats
           image: ghcr.io/blockscout/stats:v2.12.0
