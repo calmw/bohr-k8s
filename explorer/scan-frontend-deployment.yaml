@@ -44,7 +44,6 @@ spec:
               value: 'https'
             - name: NEXT_PUBLIC_STATS_API_HOST # stats服务
               value: 'https://api-scan.botchain.ai'
-#              value: 'https://api-scan.bohr.life:8080'
             - name: NEXT_PUBLIC_NETWORK_NAME
               value: 'BOHR Chain'
             - name: NEXT_PUBLIC_NETWORK_SHORT_NAME
@@ -66,7 +65,6 @@ spec:
             - name: NEXT_PUBLIC_HOMEPAGE_CHARTS
               value: '["daily_txs"]'
             - name: NEXT_PUBLIC_VISUALIZE_API_HOST
-#              value: 'http://api-scan.bohr.life:8081'
               value: 'https://api-scan.botchain.ai'
             - name: NEXT_PUBLIC_IS_TESTNET
               value: 'true'
