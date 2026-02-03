@@ -77,7 +77,7 @@ spec:
             - name: DISABLE_FILE_LOGGING
               value: "false"
             - name: DATABASE_URL
-              value: "postgresql://scan_user:36d5Me1KZ61N8j3B2NVb@bohr-prod-pg.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan?sslmode=require"
+              value: "postgresql://postgres:ry0sZPifrZVoWghxnMfE@bohr-prod-pg.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan?sslmode=require"
             - name: ETHEREUM_JSONRPC_TRANSPORT
               value: "http"
             - name: ETHEREUM_JSONRPC_DISABLE_ARCHIVE_BALANCES
