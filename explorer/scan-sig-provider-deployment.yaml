@@ -13,8 +13,6 @@ spec:
       labels:
         app: scan-sig-provider
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: ip-10-13-53-226.ap-northeast-1.compute.internal
       containers:
         - name: sig-provider
           image: ghcr.io/blockscout/sig-provider:v1.1.1
