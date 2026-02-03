@@ -11,6 +11,7 @@ kubectl apply -f scan-sig-provider-deployment.yaml -n bohr-prod &&
 kubectl apply -f scan-backend-service.yaml -n bohr-prod &&
 kubectl apply -f scan-frontend-service.yaml -n bohr-prod &&
 kubectl apply -f scan-stats-service.yaml -n bohr-prod &&
+kubectl apply -f scan-api-ingress.yaml --namespace=bohr-prod &&
 kubectl apply -f scan-frontend-ingress.yaml --namespace=bohr-prod
 
 echo "等待 20 秒..."
