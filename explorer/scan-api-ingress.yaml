@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     # 启用并配置CORS
     nginx.ingress.kubernetes.io/enable-cors: "true"
-#    nginx.ingress.kubernetes.io/cors-allow-origin: "https://scan.bohr.life"
+#    nginx.ingress.kubernetes.io/cors-allow-origin: "https://scan.botchain.ai"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     # 允许携带凭证（如果前端请求有cookie/token等）
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
@@ -20,7 +20,7 @@ metadata:
 spec:
   ingressClassName: nginx-public
   rules:
-    - host: api-scan.bohr.life  # 新增host
+    - host: api-scan.botchain.ai  # 新增host
       http:
         paths:
           - path: /api/v1

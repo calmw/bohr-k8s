@@ -31,7 +31,7 @@ spec:
               cpu: "500m"
           env:
             - name: USER_OPS_INDEXER__INDEXER__RPC_URL
-              value: "ws-rpc.bohr.life"
+              value: "ws-rpc.botchain.ai"
             - name: USER_OPS_INDEXER__DATABASE__CONNECT__URL
               value: "postgresql://postgres:tn8D4aKunRGg7AmVeUHA@bohr-prod-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com:5432/scan"
             - name: USER_OPS_INDEXER__DATABASE__RUN_MIGRATIONS

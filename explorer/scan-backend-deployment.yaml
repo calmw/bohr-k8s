@@ -83,7 +83,7 @@ spec:
             - name: ETHEREUM_JSONRPC_DISABLE_ARCHIVE_BALANCES
               value: "false"
             - name: ETHEREUM_JSONRPC_TRACE_URL
-              value: "http://rpc.bohr.life"
+              value: "https://rpc.botchain.ai"
             - name: SECRET_KEY_BASE
               value: "56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN"
             - name: PORT

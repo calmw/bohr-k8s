@@ -39,11 +39,11 @@ spec:
             - name: ETHEREUM_JSONRPC_VARIANT
               value: 'geth'
             - name: NEXT_PUBLIC_API_HOST
-              value: "scan.bohr.life"
+              value: "scan.botchain.ai"
             - name: NEXT_PUBLIC_API_PROTOCOL
               value: 'https'
             - name: NEXT_PUBLIC_STATS_API_HOST # stats服务
-              value: 'https://api-scan.bohr.life'
+              value: 'https://api-scan.botchain.ai'
 #              value: 'https://api-scan.bohr.life:8080'
             - name: NEXT_PUBLIC_NETWORK_NAME
               value: 'BOHR Chain'
@@ -60,14 +60,14 @@ spec:
             - name: NEXT_PUBLIC_API_BASE_PATH
               value: '/'
             - name: NEXT_PUBLIC_APP_HOST
-              value: 'scan.bohr.life'
+              value: 'scan.botchain.ai'
             - name: NEXT_PUBLIC_APP_PROTOCOL
               value: 'https'
             - name: NEXT_PUBLIC_HOMEPAGE_CHARTS
               value: '["daily_txs"]'
             - name: NEXT_PUBLIC_VISUALIZE_API_HOST
 #              value: 'http://api-scan.bohr.life:8081'
-              value: 'https://api-scan.bohr.life'
+              value: 'https://api-scan.botchain.ai'
             - name: NEXT_PUBLIC_IS_TESTNET
               value: 'true'
             - name: NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL
