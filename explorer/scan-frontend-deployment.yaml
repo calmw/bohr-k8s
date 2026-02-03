@@ -18,8 +18,8 @@ spec:
     spec:
       containers:
         - name: scan-frontend
-          image: ghcr.io/blockscout/frontend:latest
-#          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/scan-frontend:test-046841-20260202231533
+#          image: ghcr.io/blockscout/frontend:latest
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/scan-frontend:test-046841-20260202231533
           ports:
             - containerPort: 3000
           resources:
@@ -45,11 +45,11 @@ spec:
             - name: NEXT_PUBLIC_STATS_API_HOST # stats服务
               value: 'https://api-scan.botchain.ai'
             - name: NEXT_PUBLIC_NETWORK_NAME
-              value: 'BOHR Chain'
+              value: 'BOT Chain'
             - name: NEXT_PUBLIC_NETWORK_SHORT_NAME
-              value: 'BOHR Chain'
+              value: 'BOT Chain'
             - name: NEXT_PUBLIC_NETWORK_ID
-              value: '968'
+              value: '77'
             - name: NEXT_PUBLIC_NETWORK_CURRENCY_NAME
               value: 'BOT'
             - name: NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL
