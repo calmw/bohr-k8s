@@ -4,7 +4,7 @@ metadata:
   name: rpc-http-ingress
   namespace: bohr-prod
   annotations:
-    nginx.ingress.kubernetes.io/limit-rps: "3000"
+    nginx.ingress.kubernetes.io/limit-rps: "8000"
     nginx.ingress.kubernetes.io/limit-burst: "500"
     nginx.ingress.kubernetes.io/proxy-body-size: "3m"
     # 启用并配置CORS
