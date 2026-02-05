@@ -14,7 +14,7 @@ kubectl delete pvc genesis-keys-pvc -n bohr-prod &&
 kubectl delete pvc genesis-json-pvc -n bohr-prod
 ```
 
-### 公共ConfigMap
+### 公共 ConfigMap
 
 ```shell
 kubectl create configmap node-config --from-file=./cm/node-config.toml -n bohr-prod  && 
