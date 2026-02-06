@@ -19,7 +19,7 @@ spec:
       containers:
         - name: scan-frontend
 #          image: ghcr.io/blockscout/frontend:latest
-          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/scan-frontend:test-046841-20260202231533
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-test/scan-frontend:master-4b1552-20260206162355
           ports:
             - containerPort: 3000
           resources:

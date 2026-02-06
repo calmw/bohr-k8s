@@ -4,7 +4,7 @@
 k3d image import bohr_chain -c bohr-chain
 ```
 
-### 公共Pvc   
+### 公共Pvc
 
 ```shell
 kubectl apply -f genesis-json-pvc.yaml -n bohr-prod &&
@@ -133,6 +133,10 @@ curl -X POST http://127.0.0.1:8545 \
 "id": 1
 }'
 ```
+
+#### 查看资源使用情况
+
+``` kubectl top pod chain-node-rpc-0 -n bohr-prod ```
 
 
 
