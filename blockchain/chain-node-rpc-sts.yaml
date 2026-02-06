@@ -40,7 +40,7 @@ spec:
               cpu: "10m"
               ephemeral-storage: "25Gi"
             limits:
-              memory: "2500Mi"
+              memory: "5000Mi"
               cpu: "2500m"
               ephemeral-storage: "30Gi"
           livenessProbe:
