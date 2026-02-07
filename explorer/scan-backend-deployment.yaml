@@ -41,10 +41,10 @@ spec:
           resources:
             requests:
               memory: "500Mi"
-              cpu: "500m"
+              cpu: "100m"
             limits:
-              memory: "510Mi"
-              cpu: "510m"
+              memory: "2000Mi"
+              cpu: "2000m"
           ports:
             - containerPort: 4000
           livenessProbe:
