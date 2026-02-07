@@ -7,6 +7,7 @@ metadata:
     app: chain-node-rpc
 spec:
   type: ClusterIP
+  sessionAffinity: ClientIP
   selector:
     app: chain-node-rpc
   ports:

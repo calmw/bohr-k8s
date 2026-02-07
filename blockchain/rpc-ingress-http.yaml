@@ -11,12 +11,12 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     # LB
-    nginx.ingress.kubernetes.io/load-balance: "ip_hash"
+#    nginx.ingress.kubernetes.io/load-balance: "ip_hash"
     # 超时 / keepalive
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
-    nginx.ingress.kubernetes.io/keepalive: "20480"
+    nginx.ingress.kubernetes.io/keepalive: "4096"
 spec:
   ingressClassName: nginx-public
   rules:
