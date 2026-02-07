@@ -4,12 +4,19 @@ metadata:
   name: rpc-http-ingress
   namespace: bohr-prod
   annotations:
-#    nginx.ingress.kubernetes.io/limit-rps: "10000"
-#    nginx.ingress.kubernetes.io/limit-burst: "500"
-#    nginx.ingress.kubernetes.io/proxy-body-size: "3m"
+    #    nginx.ingress.kubernetes.io/limit-rps: "10000"
+    #    nginx.ingress.kubernetes.io/limit-burst: "500"
+    #    nginx.ingress.kubernetes.io/proxy-body-size: "3m"
     # 启用并配置CORS
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    # LB
+    nginx.ingress.kubernetes.io/load-balance: "ip_hash"
+    # 超时 / keepalive
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/keepalive: "20480"
 spec:
   ingressClassName: nginx-public
   rules:
