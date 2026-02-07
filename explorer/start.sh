@@ -11,7 +11,9 @@ sleep 10
 kubectl apply -f scan-stats-deployment.yaml -n bohr-prod
 echo "等待 10 秒..."
 sleep 10
-kubectl apply -f scan-frontend-deployment.yaml -n bohr-prod &&
+kubectl apply -f scan-frontend-deployment.yaml -n bohr-prod
+echo "等待 10 秒..."
+sleep 10
 kubectl apply -f scan-visualizer-deployment.yaml -n bohr-prod &&
 kubectl apply -f scan-sig-provider-deployment.yaml -n bohr-prod &&
 kubectl apply -f scan-backend-service.yaml -n bohr-prod &&
