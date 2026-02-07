@@ -3,7 +3,9 @@
 kubectl delete statefulset chain-node-rpc -n bohr-prod
 echo "等待 10 秒..."
 sleep 10
-kubectl delete pvc rpc-data-chain-node-rpc-0 -n bohr-prod
+kubectl delete pvc rpc-data-chain-node-rpc-0 -n bohr-prod &&
+kubectl delete pvc rpc-data-chain-node-rpc-1 -n bohr-prod &&
+kubectl delete pvc rpc-data-chain-node-rpc-2 -n bohr-prod
 echo "等待 10 秒..."
 sleep 10
 kubectl delete configmap genesis-config -n bohr-prod &&
