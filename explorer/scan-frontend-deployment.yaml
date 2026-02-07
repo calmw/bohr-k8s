@@ -27,8 +27,8 @@ spec:
               memory: "256Mi"    # 增加内存，100Mi对Next.js可能不足
               cpu: "200m"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "2000Mi"
+              cpu: "1000m"
           env:
             # ===== 修复关键环境变量 =====
             - name: HOST                    # 新增：让Next.js监听所有接口
