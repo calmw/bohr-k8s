@@ -19,7 +19,7 @@ kubectl apply -f chain-node-rpc-sts.yaml -n bohr-prod
 echo "启动 chain-node-rpc service ..."
 kubectl apply -f chain-node-rpc-svc.yaml -n bohr-prod
 echo "启动 chain-node-rpc ingress ..."
-kubectl apply -f rpc-ingress-http.yaml -n bohr-prod
+kubectl apply -f rpc-ingress-http.yaml -n bohr-prod &&
 kubectl apply -f rpc-ingress-ws.yaml -n bohr-prod
 
 echo "等待 20 秒..."
