@@ -13,10 +13,10 @@ metadata:
     # LB
 #    nginx.ingress.kubernetes.io/load-balance: "ip_hash"
     # 超时 / keepalive
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
-    nginx.ingress.kubernetes.io/keepalive: "4096"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/keepalive: "10000"
 spec:
   ingressClassName: nginx-public
   rules:

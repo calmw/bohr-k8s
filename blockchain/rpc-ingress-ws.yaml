@@ -13,8 +13,8 @@ metadata:
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
       }
-    nginx.ingress.kubernetes.io/limit-rps: "50"
-    nginx.ingress.kubernetes.io/limit-burst: "100"
+#    nginx.ingress.kubernetes.io/limit-rps: "50"
+#    nginx.ingress.kubernetes.io/limit-burst: "100"
     # 启用并配置CORS
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
