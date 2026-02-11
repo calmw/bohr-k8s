@@ -31,9 +31,9 @@ spec:
             - name: MYSQL_USERNAME
               value: "bridge_user"
             - name: MYSQL_PASSWORD
-              value: "WbVyC0cxipABh9Zo1KaW"
+              value: "NHTt4thc93GhsFC5d3QZ"
             - name: MYSQL_HOST
-              value: "chain-instance-1.cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
+              value: "bohr-prod-mysql.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
             - name: MYSQL_PORT
               value: "3306"
           resources:
