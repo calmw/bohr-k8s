@@ -19,7 +19,7 @@ metadata:
 spec:
   ingressClassName: nginx-public
   rules:
-    - host: api-bridge.bohr.life
+    - host: api-bridge.botchain.ai
       http:
         paths:
           - path: /

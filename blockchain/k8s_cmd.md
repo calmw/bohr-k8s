@@ -139,7 +139,10 @@ curl -X POST http://127.0.0.1:8545 \
 ``` kubectl top pod chain-node-rpc-0 -n bohr-prod ```
 
 
-
+#### 重启
+```shell
+kubectl rollout restart statefulset chain-node-rpc -n bohr-prod
+```
 
 
 
