@@ -90,6 +90,8 @@ spec:
               value: "eth,net,web3,debug,txpool"
             - name: WS_API
               value: "eth,net,web3,debug,txpool"
+            - name: TX_FEE_CAP # 允许通过 RPC 发送的单笔交易,最多可消耗的主币数量，作为手续费
+              value: "1000"
             - name: PASSED_FORK_TIME
               value: "0"
             - name: LAST_HARDFORK_TIME # + 10

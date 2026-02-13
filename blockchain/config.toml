@@ -1,5 +1,5 @@
 [Eth]
-NetworkId = 77
+NetworkId = 677
 SyncMode = "full"
 DisablePeerTxBroadcast = false
 EVNNodeIDsToAdd = []
@@ -35,7 +35,7 @@ BlobExtraReserve = 0
 [Eth.Miner]
 GasFloor = 0
 GasCeil = 35000000
-GasPrice = 1000000000000
+GasPrice = 47619047619
 Recommit = 10000000000
 VoteEnable = false
 DisableVoteAttestation = false
@@ -48,7 +48,7 @@ SentryURL = ""
 ValidatorCommission = 1000
 
 [[Eth.Miner.Mev.Builders]]
-Address = "0x04d63abcd2b9b1baa327f2dda0f873f197ccd186"
+Address = "0xfbfF2FdC957a1bb762c8FC7B81C04D73C4F81007"
 URL = ""
 
 [Eth.TxPool]
@@ -56,7 +56,7 @@ Locals = []
 NoLocals = true
 Journal = "transactions.rlp"
 Rejournal = 3600000000000
-PriceLimit = 1000000000000
+PriceLimit = 47619047619
 PriceBump = 10
 AccountSlots = 16
 GlobalSlots = 4096
