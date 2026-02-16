@@ -4,9 +4,9 @@ kubectl delete deployment scan-backend -n bohr-prod
 echo "等待 10 秒..."
 sleep 10
 kubectl delete deployment scan-stats -n bohr-prod
-echo "等待 10 秒..."
-sleep 10
-kubectl delete deployment scan-frontend -n bohr-prod
+#echo "等待 10 秒..."
+#sleep 10
+#kubectl delete deployment scan-frontend -n bohr-prod
 echo "等待 10 秒..."
 sleep 10
 kubectl delete deployment scan-sig-provider -n bohr-prod
