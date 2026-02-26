@@ -28,6 +28,53 @@ spec:
             limits:
               memory: "2000Mi"
               cpu: "1000m"
+#          env:
+#            # ===== 修复关键环境变量 =====
+#            - name: HOST                    # 新增：让Next.js监听所有接口
+#              value: "0.0.0.0"
+#            - name: PORT
+#              value: "3000"
+#            # ===== 原有环境变量（修正错误）=====
+#            - name: ETHEREUM_JSONRPC_VARIANT
+#              value: 'geth'
+#            - name: NEXT_PUBLIC_API_HOST
+#              value: "scan.botchain.ai"
+#            - name: NEXT_PUBLIC_API_PROTOCOL
+#              value: 'https'
+#            - name: NEXT_PUBLIC_STATS_API_HOST # stats服务
+#              value: 'https://api-scan.botchain.ai'
+#            - name: NEXT_PUBLIC_NETWORK_NAME
+#              value: 'BOT Chain'
+#            - name: NEXT_PUBLIC_NETWORK_SHORT_NAME
+#              value: 'BOT Chain'
+#            - name: NEXT_PUBLIC_NETWORK_ID
+#              value: '77'
+#            - name: NEXT_PUBLIC_NETWORK_CURRENCY_NAME
+#              value: 'BOT'
+#            - name: NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL
+#              value: 'BOT'
+#            - name: NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS
+#              value: '18'
+#            - name: NEXT_PUBLIC_API_BASE_PATH
+#              value: '/'
+#            - name: NEXT_PUBLIC_APP_HOST
+#              value: 'scan.botchain.ai'
+#            - name: NEXT_PUBLIC_APP_PROTOCOL
+#              value: 'https'
+#            - name: NEXT_PUBLIC_HOMEPAGE_CHARTS
+#              value: '["daily_txs"]'
+#            - name: NEXT_PUBLIC_VISUALIZE_API_HOST
+#              value: 'https://api-scan.botchain.ai'
+#            - name: NEXT_PUBLIC_IS_TESTNET
+#              value: 'false'
+#            - name: NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL
+#              value: 'wss'
+#            - name: NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
+#              value: "19daf63aef19e341053404ec58bcbf22"
+#            - name: ENABLE_WALLETCONNECT
+#              value: "true"
+#            - name: NEXT_PUBLIC_API_SPEC_URL
+#              value: 'https://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml'
           env:
             # ===== 修复关键环境变量 =====
             - name: HOST                    # 新增：让Next.js监听所有接口
@@ -55,6 +102,8 @@ spec:
               value: 'BOT'
             - name: NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS
               value: '18'
+            - name: NEXT_PUBLIC_NETWORK_RPC_URL
+              value: 'https://rpc.botchain.ai'
             - name: NEXT_PUBLIC_API_BASE_PATH
               value: '/'
             - name: NEXT_PUBLIC_APP_HOST
