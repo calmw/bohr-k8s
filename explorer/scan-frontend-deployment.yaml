@@ -95,7 +95,7 @@ spec:
             - name: NEXT_PUBLIC_NETWORK_SHORT_NAME
               value: 'BOT Chain'
             - name: NEXT_PUBLIC_NETWORK_ID
-              value: '77'
+              value: '677'
             - name: NEXT_PUBLIC_NETWORK_CURRENCY_NAME
               value: 'BOT'
             - name: NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL
