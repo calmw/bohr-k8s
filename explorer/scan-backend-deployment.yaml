@@ -43,8 +43,8 @@ spec:
               memory: "500Mi"
               cpu: "100m"
             limits:
-              memory: "3000Mi"
-              cpu: "3000m"
+              memory: "16000Mi"
+              cpu: "8000m"
           ports:
             - containerPort: 4000
           livenessProbe:
