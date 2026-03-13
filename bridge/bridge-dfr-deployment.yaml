@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bridge-dfr
-  namespace: bohr-test
+  namespace: bohr-prod
   labels:
     app.kubernetes.io/name: bridge-dfr
 spec:
