@@ -8,6 +8,7 @@ kubectl apply -f bridge-api-deployment.yaml  -n bohr-prod &&
 kubectl apply -f bridge-relayernode-deployment.yaml  -n bohr-prod 
 
 kubectl logs -f -n bohr-prod bridge-relayer-0 -c bridge-relayer
+kubectl logs -f -n bohr-prod bridge-relayer-0 -c bridge-api
 kubectl logs -f bohrdex-subgraph-fhsrn -c bohrdex-subgraph
 
 kubectl get deployment -n bohr-prod

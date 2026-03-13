@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bridge-dfr
+  namespace: bohr-test
+  labels:
+    app.kubernetes.io/name: bridge-dfr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bridge-dfr
+  template:
+    metadata:
+      labels:
+        app: bridge-dfr
+    spec:
+      containers:
+        - name: bridge-dfr
+          image: 630968570112.dkr.ecr.ap-northeast-1.amazonaws.com/bohr-prod/bridge-dfr:test-840e96-20260313185757
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 8080
+          env:
+            - name: LISTEN_ADDR
+              value: "0.0.0.0:8080"
+            - name: MYSQL_DATABASE
+              value: "bridge"
+            - name: MYSQL_USERNAME
+              value: "bridge_user"
+            - name: MYSQL_PASSWORD
+              value: "NHTt4thc93GhsFC5d3QZ"
+            - name: MYSQL_HOST
+              value: "bohr-prod-mysql.cluster-cbagk0a62xfv.ap-northeast-1.rds.amazonaws.com"
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: CHAT_ID
+              value: "oc_abfe50958ed658fadbed62d3b72fecc2"
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "100Mi"
+              ephemeral-storage: "5Gi"
+            limits:
+              cpu: "1000m"
+              memory: "1000Mi"
+              ephemeral-storage: "8Gi"
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 200
+            periodSeconds: 200
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 200
+            periodSeconds: 200
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
