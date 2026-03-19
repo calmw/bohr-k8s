@@ -36,8 +36,8 @@ spec:
             - name: MYSQL_PORT
               value: "3306"
             - name: CHAT_ID
-#              value: "oc_abfe50958ed658fadbed62d3b72fecc2"
-              value: "oc_aa68394d5893e86ae0897a9bcca484c6"
+              value: "oc_abfe50958ed658fadbed62d3b72fecc2"
+#              value: "oc_aa68394d5893e86ae0897a9bcca484c6"
           resources:
             requests:
               cpu: "10m"
